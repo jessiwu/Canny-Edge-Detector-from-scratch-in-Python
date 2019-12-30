@@ -1,37 +1,45 @@
+from Canny import MagicCanny
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture(0)
+def main():
 
-while(True):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
+    cap = cv2.VideoCapture(0)
 
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    while(True):
+        # Modify the frame's width and height to 1080x720
+        # ret = cap.set(3, 1280)
+        # ret = cap.set(4, 720)
 
-    # Canny Edge detection
-    gray_edges = cv2.Canny(gray, 100, 150)
+        # Check if camera opened successfully
+        if (cap.isOpened()==False):
+            print("Error opening video stream or file")
+            exit()
 
-    gray_edges_200 = cv2.Canny(gray, 100, 200)
+        # Capture frame-by-frame
+        ret, frame = cap.read()
 
-    gray_edges_300 = cv2.Canny(gray, 100, 300)
+        # Our operations on the frame come here
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    bgr_edges = cv2.cvtColor(gray_edges, cv2.COLOR_GRAY2BGR)
+        magicCanny = MagicCanny(gray, 20, 100)
+        # magicCanny.printSrcImageShape()
+        edges = magicCanny.CannyAlgorithm()
 
+        # Display the resulting frame
+        cv2.imshow('frame', frame)
+        cv2.imshow('edges', edges)
 
-    cv2.imshow('frame', frame)
-    cv2.imshow('edges', gray_edges)
-    cv2.imshow('edges 200', gray_edges_200)
-    cv2.imshow('edges 300', gray_edges_300)
+        waitKey = cv2.waitKey(1) & 0xFF
+        if waitKey == ord('q'):
+            break
 
-    # break if the 'q' is pressed
-    tmp = cv2.waitKey(1) & 0xFF
-    if tmp == ord('q'):
-        break
-    elif tmp == ord('b'):
-        break
+    # When everything done, release the video capture object
+    cap.release()
 
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+    # Closes all the frames
+    cv2.destroyAllWindows()
+    exit()
+
+if __name__ == "__main__":
+    main()
