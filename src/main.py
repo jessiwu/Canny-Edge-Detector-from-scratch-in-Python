@@ -19,11 +19,8 @@ def main():
         # Capture frame-by-frame
         ret, frame = cap.read()
 
-        # Our operations on the frame come here
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        magicCanny = MagicCanny(gray, 20, 100)
-        # magicCanny.printSrcImageShape()
+        magicCanny = MagicCanny(gray, 10, 50)
         edges = magicCanny.CannyAlgorithm()
 
         # Display the resulting frame
